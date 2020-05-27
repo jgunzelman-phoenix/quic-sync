@@ -66,6 +66,21 @@ paths:
       responses:
         201:
           description: 'Upserted topic config'
+  /api/v1/inbox/configs:
+    get:
+      summary: 'Get list of topic configuration'
+      description: 'Get a list of topic connections for this quic-sync server'
+      tags:
+        - Inbox Config
+      responses:
+        200:
+          description: 'Upserted topic config'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic-Config'
   /api/v1/inbox/config/{topic}:
     parameters:
       - in: path
