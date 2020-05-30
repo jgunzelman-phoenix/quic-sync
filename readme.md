@@ -22,7 +22,7 @@ The service coded in go and will need to be cross compiled to the target OS and 
       1. Install go with cross compiling enabled
       2. Install dep package manager for go
 
-## Build executable
+## Build Executable
 
 Build the executable for alpine linux 
 1. Pull dependecies with dep
@@ -48,3 +48,9 @@ Below are the environment variable and volumes you need to mount to run this doc
 
 ## Environment Variables
 
+| Variable Name | Default Value | Description |
+| ----------- | ----------- | -------- |
+| WEB_PORT        | 8443                      | HTTPS port to bind too.
+| TLS_CERT_FILE       | /opt/quic_sync/server.crt | Certificate file for TLS
+| TLS_KEY_FILE        | /opt/quic_sync/server.key | Key file for TLS
+| KAFKA_BOOTSTRAP | kafka:9092            | Bootstrap servers for Kafka brokers

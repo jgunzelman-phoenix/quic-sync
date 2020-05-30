@@ -4,8 +4,24 @@ info:
   description: 'Quic Sync API'
   version: '1.0'
 paths:
+  /api/version:
+    get:
+      summary:
+      description:
+      tags:
+        - Meta
+      responses:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                version:
+                  type: string
+            example:
+              version : 0.0.1
   #Data Types
-  /api/v1/inbox/{topic}:
+  /api/v0/inbox/{topic}:
     parameters:
       - in: path
         name: topic
@@ -33,7 +49,7 @@ paths:
       responses:
         201:
           description: 'Data added to the topic'
-  /api/v1/inbox/topics:
+  /api/v0/inbox/topics:
     get:
       summary: 'Get list of available topics'
       description: 'Get available topics to post messages too'
@@ -52,7 +68,7 @@ paths:
                 - people
                 - places
                 - things
-  /api/v1/inbox/config:
+  /api/v0/inbox/config:
     put:
       summary: 'Upsert a topic configuration'
       description: 'Upsert a topic configuration to connect to a local kafka topic and allow this interface to post to that topic'
@@ -66,7 +82,7 @@ paths:
       responses:
         201:
           description: 'Upserted topic config'
-  /api/v1/inbox/configs:
+  /api/v0/inbox/configs:
     get:
       summary: 'Get list of topic configuration'
       description: 'Get a list of topic connections for this quic-sync server'
@@ -117,7 +133,7 @@ paths:
             application/json:
               example: 
                 error: Invalid topic name
-  /api/v1/outbox/topic-connections:
+  /api/v0/outbox/topic-connections:
     get:
       summary: 'Get list of active topic connections to other Quic Sync topics'
       description: 'Provides a list of active topic connections to Quic Sync topics'
@@ -132,7 +148,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Topic-Connection'
-  /api/v1/outbox/config/topic-connection:
+  /api/v0/outbox/config/topic-connection:
     put:
       summary: 'Add a topic connection'
       description: 'Add a topic connection to the quic sync server'
@@ -152,7 +168,7 @@ paths:
                 Name Already in Use:
                   value:
                     error: 'Topic connection name supplied is already in use'
-  /api/v1/outbox/config/topic-connection/{name}:
+  /api/v0/outbox/config/topic-connection/{name}:
     parameters:
       - in: path
         name: name
@@ -195,6 +211,7 @@ paths:
 components:
   schemas:
     Topic-Connection:
+      description: A topic connection represents a connection to anothe quic sync server.  This config will post message from the local topic to the url provided
       type: object
       properties:
         name:
@@ -208,6 +225,7 @@ components:
           format: url
           description: Inbox target url that data from the local-topic will be sent to.
     Topic-Config:
+      description: A topic config is a mapping between the name used in the rest interface to the kafka topic.
       type: object
       properties:
         name:
