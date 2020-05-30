@@ -1,4 +1,4 @@
-#QUIC SYNC
+# QUIC SYNC
 
 Quic Sync is a microservice that links kafka topics over quic http3 connection.
 
@@ -24,9 +24,15 @@ The service coded in go and will need to be cross compiled to the target OS and 
 
 Build the executable for alpine linux 
 
-GOOS=OS to build 
-
 1. Build the service for linux and amd64
    ```bash
    GOOS=linux GOARCH=amd64 go build -o quic-sync-server
+   ```
+## Build Container
+
+Build container for Quic Sync
+
+1. Build Container
+   ```bash
+   docker build . -t quic-sync:latest
    ```
