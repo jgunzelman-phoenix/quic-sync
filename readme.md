@@ -13,17 +13,22 @@ The service coded in go and will need to be cross compiled to the target OS and 
 
 **Prerequisites**
    * Mac OS
-      * Install go with cross compiling enabled
-      ```bash
-      brew install go --with-cc-common
-      ```
+      1. Install go with cross compiling enabled and dep the go package manager
+         ```bash
+         brew install go --with-cc-common
+         brew install dep
+         ```
    * Windows
-      * Install go with cross compiling enabled
+      1. Install go with cross compiling enabled
+      2. Install dep package manager for go
 
 ## Build executable
 
 Build the executable for alpine linux 
-
+1. Pull dependecies with dep
+   ```bash
+   dep ensure
+   ```
 1. Build the service for linux and amd64
    ```bash
    GOOS=linux GOARCH=amd64 go build -o quic-sync-server
@@ -36,3 +41,10 @@ Build container for Quic Sync
    ```bash
    docker build . -t quic-sync:latest
    ```
+
+# Running the Container
+
+Below are the environment variable and volumes you need to mount to run this docker container
+
+## Environment Variables
+
