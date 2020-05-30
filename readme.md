@@ -4,6 +4,7 @@ Quic Sync is a microservice that links kafka topics over quic http3 connection.
 
 **Why use this over mirrormaker?**
    -  QUIC!!! Quic is a new application level network protocol that uses UDP as it's transport layer and supports most of TCPs features.  Best of all http3 runs on top of quic so this microservice uses REST to exchange data.
+      - https://www.chromium.org/quic
    - For disadvantaged and poorly connected clusters this can be used as an alternative to mirrormaker when connectivity errors pervent mirrormaker from working.
    - Topic Filtering,  While currently not a feature we will be adding message filtering as an option to topic connections.
 
@@ -42,7 +43,7 @@ Build container for Quic Sync
    docker build . -t quic-sync:latest
    ```
 
-# Running the Container
+# Docker Container Info
 
 Below are the environment variable and volumes you need to mount to run this docker container
 
@@ -54,3 +55,21 @@ Below are the environment variable and volumes you need to mount to run this doc
 | TLS_CERT_FILE       | /opt/quic_sync/server.crt | Certificate file for TLS
 | TLS_KEY_FILE        | /opt/quic_sync/server.key | Key file for TLS
 | KAFKA_BOOTSTRAP | kafka:9092            | Bootstrap servers for Kafka brokers
+
+## Running
+
+You have two options for running the container either by itself or via docker swarm with kafka
+
+* Just the container
+   ```bash
+   docker run -p 8443:8443 quic-sync:latest
+   ```
+* Swarm stack
+  * Start
+     ```bash
+     docker stack deploy -c quic-sync-test-stack.yaml quic-sync
+     ```
+  * Stop
+    ```bash
+    docker stack remove quic-sync
+    ```
