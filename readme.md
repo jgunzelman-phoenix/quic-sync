@@ -67,7 +67,7 @@ You have two options for running the container either by itself or via docker sw
 * Swarm stack
   * Start
      ```bash
-     docker stack deploy -c quic-sync-test-stack.yaml quic-sync
+     docker stack deploy -c test-stack/quic-sync-test-stack.yaml quic-sync
      ```
   * Stop
     ```bash

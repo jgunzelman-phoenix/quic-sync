@@ -14,4 +14,4 @@ ADD [--chown=quic-sync:quic-sync] default-certs/* /opt/quic_sync/
 #Change ownership
 RUN chmod -R 755 /opt/quic_sync
 
-ENTRYPOINT [ "quic-sync-server --web-port=${WEB_PORT} --cert-file=${TLS_CERT_FILE} --key-file=${TLS_KEY_FILE} --kafka-bootstrap=${KAFKA_BOOTSTRAP}" ]
+ENTRYPOINT [ "/opt/quic_sync/quic-sync-server --web-port=${WEB_PORT} --cert-file=${TLS_CERT_FILE} --key-file=${TLS_KEY_FILE} --kafka-bootstrap=${KAFKA_BOOTSTRAP}" ]
