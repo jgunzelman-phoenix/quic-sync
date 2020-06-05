@@ -23,29 +23,42 @@ The service coded in go and will need to be cross compiled to the target OS and 
       1. Install go with cross compiling enabled
       2. Install dep package manager for go
 
-## Build Executable
+## Running Project
 
 Build the executable for alpine linux 
 1. Pull dependecies with dep
    ```bash
    dep ensure
    ```
-1. Build the service for linux and amd64
+2. Run program
    ```bash
-   GOOS=linux GOARCH=amd64 go build -o quic-sync-server
+   go run quic-sync-server.go
    ```
+ ### Program arguments
+
+ | Argument | Default Value | Description |
+| ----------- | ----------- | -------- |
+| --web-port        | 8443                      | HTTPS port to bind too.
+| --cert-file      | ./default-certs/server.crt | Certificate file for TLS
+| --key-file      | ./default-certs/server.key | Key file for TLS
+| --kafka-bootstrap |      localhost:9092      | Bootstrap servers for Kafka brokers
+
+# Docker Container Info
+
+Here is all you need to know about the quic sync container
+
 ## Build Container
 
 Build container for Quic Sync
 
+1. Build the service for linux and amd64 (or what ever arch you are running)
+   ```bash
+   GOOS=linux GOARCH=amd64 go build -o quic-sync-server
+   ```
 1. Build Container
    ```bash
    docker build . -t quic-sync:latest
    ```
-
-# Docker Container Info
-
-Below are the environment variable and volumes you need to mount to run this docker container
 
 ## Environment Variables
 
@@ -58,7 +71,7 @@ Below are the environment variable and volumes you need to mount to run this doc
 
 ## Running
 
-You have two options for running the container either by itself or via docker swarm with kafka
+You have two options for running the container either by itself or via docker swarm with kafka and swagger api documentaion
 
 * Just the container
    ```bash

@@ -72,6 +72,14 @@
   version = "v0.9.1"
 
 [[projects]]
+  digest = "1:5b3b29ce0e569f62935d9541dff2e16cc09df981ebde48e82259076a73a3d0c7"
+  name = "github.com/op/go-logging"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b2cb9fa56473e98db8caba80237377e83fe44db5"
+  version = "v1"
+
+[[projects]]
   branch = "master"
   digest = "1:d80cc9385ee33b481a57e84b1bd6f8ee6ee40b19a52a22d61881d3eb70df4c6d"
   name = "golang.org/x/crypto"
@@ -175,6 +183,7 @@
   input-imports = [
     "github.com/gorilla/mux",
     "github.com/lucas-clemente/quic-go/http3",
+    "github.com/op/go-logging",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
