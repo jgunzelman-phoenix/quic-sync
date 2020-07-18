@@ -1,2 +1,3 @@
 vendor/
 quic-sync-server
+.vscode/
