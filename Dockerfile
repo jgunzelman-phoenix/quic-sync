@@ -1,6 +1,7 @@
 FROM alpine:3.12.0
 #Environment Variables
-ENV WEB_PORT=8443
+ENV HTTPS_PORT=8443
+ENV HTTP3_PORT=8383
 ENV TLS_CERT_FILE=/opt/quic_sync/server.crt
 ENV TLS_KEY_FILE=/opt/quic_sync/server.key 
 ENV KAFKA_BOOTSTRAP=kafka:9092
@@ -14,4 +15,4 @@ COPY default-certs/* /opt/quic_sync/
 #Change ownership
 RUN chmod -R 777 /opt/quic_sync
 #ENTRYPOINT ls -l
-ENTRYPOINT /opt/quic_sync/quic-sync-server --web-port=${WEB_PORT} --cert-file=${TLS_CERT_FILE} --key-file=${TLS_KEY_FILE} --kafka-bootstrap=${KAFKA_BOOTSTRAP}
+ENTRYPOINT /opt/quic_sync/quic-sync-server --https-port=${HTTPS_PORT} --http3-port=${HTTP3_PORT} --cert-file=${TLS_CERT_FILE} --key-file=${TLS_KEY_FILE} --kafka-bootstrap=${KAFKA_BOOTSTRAP}

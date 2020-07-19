@@ -38,7 +38,7 @@ Build the executable for alpine linux
 
  | Argument | Default Value | Description |
 | ----------- | ----------- | -------- |
-| --web-port        | 8443                      | HTTPS port to bind too.
+| --https-port        | 8443                      | HTTPS port to bind too.
 | --cert-file      | ./default-certs/server.crt | Certificate file for TLS
 | --key-file      | ./default-certs/server.key | Key file for TLS
 | --kafka-bootstrap |      localhost:9092      | Bootstrap servers for Kafka brokers
@@ -62,12 +62,13 @@ Build container for Quic Sync
 
 ## Environment Variables
 
-| Variable Name | Default Value | Description |
-| ----------- | ----------- | -------- |
-| WEB_PORT        | 8443                      | HTTPS port to bind too.
+| Variable Name       | Default Value             | Description |
+| -----------         | -----------               | -------- |
+| HTTPS_PORT          | 8443                      | HTTPS port to bind too.
+| HTTP3_PORT          | 8383                      | QUIC HTTP3 port
 | TLS_CERT_FILE       | /opt/quic_sync/server.crt | Certificate file for TLS
 | TLS_KEY_FILE        | /opt/quic_sync/server.key | Key file for TLS
-| KAFKA_BOOTSTRAP | kafka:9092            | Bootstrap servers for Kafka brokers
+| KAFKA_BOOTSTRAP     | kafka:9092                | Bootstrap servers for Kafka brokers
 
 ## Running
 

@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  title: 'Quic Sync API'
+  version: '0.1.0'
+paths:
+  /quic-sync/version:
+    get:
+      summary: "Get version"
+      description: "Gets the full semmantic version of this service"
+      tags:
+        - Meta
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+              example:
+                version : 0.1.0
+  #Data Types
+  /quic-sync/v0/message/{topic}:
+    parameters:
+      - in: path
+        name: topic
+        schema:
+          type: string
+        required: true
+        description: 'Topic you wish to post too'
+    post:
+      summary: 'Post message to the topic provided'
+      description: 'Posts message to the topic provided'
+      tags:
+        - Sync
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+          application/xml:
+            schema:
+              type: object
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        201:
+          description: 'Data added to the topic'
+        401:
+          description: 'Not authorized'
+  /quic-sync/v0/topics:
+    get:
+      summary: 'Get list of available topics'
+      description: 'Get available topics to post messages too'
+      tags:
+        - Sync
+      responses:
+        200:
+          description: 'Returns a list of topics to post to.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              example: 
+                - people
+                - places
+                - things
+  /quic-sync/v0/subscriptions:
+    put:
+      summary: 'Add a subscription from local topic to remote quic-sync server'
+      description: 'Adds a subscription to the local server that monitors the topic provided by the content and will post any messages on the local topic to the remote url provided'
+      tags:
+        - Subscriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/subscription'
+      responses:
+        201:
+          description: 'Upserted topic config'
+    get:
+      summary: 'Get list of subcriptions'
+      description: 'Get a list of topic connections for this quic-sync server'
+      tags:
+        - Subscriptions
+      responses:
+        200:
+          description: 'Returns list of subscriptions'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/subscription'
+  /quic-sync/v0/subscription/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: 'Id of the subscription'
+    get:
+      summary: 'Get a subscription'
+      description: 'Get a single subscription associated with provided {id}'
+      tags:
+        - Subscriptions
+      responses:
+        200:
+          description: 'Return a subscription corresponding to the provided {id}'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/subscription'
+    delete:
+      summary: 'Delete a subscription'
+      description: 'Delete a subscription associated with the provided {id}'
+      tags:
+        - Subscriptions
+      responses:
+        201:
+          description: 'Deleted'
+        400:
+          description: 'Bad Request - Invalid id'
+        401:
+          description: 'Unauthorized'
+components:
+  schemas:
+    subscription:
+      description: A topic connection represents a connection to anothe quic sync server.  This config will post message from the local topic to the url provided
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique Id of the connection
+        user_name:
+          type: string
+          description: Name off the certificate that requested the connection.
+        enabled:
+          type: boolean
+          description: Designates wheather the subscription is enabled
+        topic_name:
+          type: string
+          description: Name of the local kafka topic that is read for this subscription out to other quic sync servers.
+        endpoint:
+          type: string
+          format: url
+          description: Remote target url that data from the local-topic will be sent to.
+      example:
+        id: '11cbf2ac-1afd-45ef-a2f3-7b45e8b3ca7c'
+        user_name: 'john.doe'
+        enabled: true
+        topic_name: people
+        endpoint: 'https://quic-sync.org:8585/quic-sync/v0/message'
