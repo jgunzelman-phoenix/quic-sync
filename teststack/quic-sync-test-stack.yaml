@@ -38,13 +38,17 @@ services:
     ports:
       - "2181:2181"
   rev-proxy:
-    image: nginx:latest
+    image: nginx:alpine
     ports:
       - "443:8443"
     volumes:
       - type: bind
-        source: ../configs/
+        source: ../configs/server-certs/
         target: /opt/certs
       - type: bind
-        source: nginx/
+        source: nginx/nginx.conf
         target: /etc/nginx/
+    depends_on:
+      - kafka-ui
+      - swagger-ui
+      - quic-sync
