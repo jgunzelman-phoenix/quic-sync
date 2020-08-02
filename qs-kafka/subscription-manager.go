@@ -30,25 +30,25 @@ const MB = 1048576
 const MAX_SIZE = 50 * MB
 
 //Initialize sets up the kafka client and http3 client for transmission
-func Initialize(bootstrap string, keyfile string) {
+func Initialize(bootstrap string) {
 	//Kafka config
 	brokers := strings.Split(bootstrap, ",")
 	config := sarama.NewConfig()
 	cluster, err := sarama.NewConsumer(brokers, config)
 	if err != nil {
-		log.Error(err.Error())
+		log.Fatal("Failed to connect to Kafka!!")
+		log.Fatal(err.Error())
+		os.Exit(1)
 	}
 	cluster.Topics()
 	//quic confgis
 	var keyLog io.Writer
-	if len(keyfile) > 0 {
-		f, err := os.Create(keyfile)
-		if err != nil {
-			log.Error(err.Error())
-		}
-		defer f.Close()
-		keyLog = f
+	f, err := os.Create("./keylog")
+	if err != nil {
+		log.Error(err.Error())
 	}
+	defer f.Close()
+	keyLog = f
 	pool, err := x509.SystemCertPool()
 	if err != nil {
 		log.Error(err.Error())

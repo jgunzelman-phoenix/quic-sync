@@ -14,8 +14,8 @@ import (
 
 //Constants
 const defaultWebPort = 8443
-const defaultCertLocation = "./default-certs/server.crt"
-const defaultKeyLocation = "./default-certs/server.key"
+const defaultCertLocation = "./configs/server-certs/server.pem"
+const defaultKeyLocation = "./configs/server-certs/server.key"
 
 //Service Variables
 var httpsPort int
@@ -49,20 +49,20 @@ func main() {
 	//Initialize
 	log.Info("--- Quic Sync Server ---")
 	flag.IntVar(&httpsPort, "https-port", defaultWebPort, "port to bind to for https server")
-	flag.IntVar(&http3Port, "https-port", defaultWebPort, "port to bind to for http3 server")
+	flag.IntVar(&http3Port, "http3-port", defaultWebPort, "port to bind to for http3 server")
 	flag.StringVar(&certFile, "cert-file", defaultCertLocation, "cert file for tls")
 	flag.StringVar(&keyFile, "key-file", defaultKeyLocation, "key file for tls")
 	flag.StringVar(&kafkaBootstrap, "kafka-bootstrap", "localhost:9092", "kafka bootstrap server list ex: host1:port,host2:port")
 	flag.Parse()
 	log.Debug("CONFIG:")
-	log.Debug("https-port: " + strconv.Itoa(httpsPort))
-	log.Debug("http3-port" + strconv.Itoa(http3Port))
-	log.Debug("cert-file: " + certFile)
-	log.Debug("key-file: " + keyFile)
-	log.Debug("kafka-bootstrap: " + kafkaBootstrap)
+	log.Debug("https-port      : " + strconv.Itoa(httpsPort))
+	log.Debug("http3-port      : " + strconv.Itoa(http3Port))
+	log.Debug("cert-file       : " + certFile)
+	log.Debug("key-file        : " + keyFile)
+	log.Debug("kafka-bootstrap : " + kafkaBootstrap)
 
 	//Set initialize Subscription Manager
-	subManager.Initialize(kafkaBootstrap, keyFile)
+	subManager.Initialize(kafkaBootstrap)
 
 	//Gorilla router initialization
 	router := mux.NewRouter()
@@ -82,8 +82,8 @@ func main() {
 	router.HandleFunc("/quic-sync/v0/subscription/{id}", restApi.DeleteSubscription).Methods("DELETE")
 
 	//Start webserver
-	go starthttps(router)
-	starthttp3(router)
+	go starthttp3(router)
+	starthttps(router)
 }
 
 func starthttps(router *mux.Router) {

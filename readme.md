@@ -66,8 +66,8 @@ Build container for Quic Sync
 | -----------         | -----------               | -------- |
 | HTTPS_PORT          | 8443                      | HTTPS port to bind too.
 | HTTP3_PORT          | 8383                      | QUIC HTTP3 port
-| TLS_CERT_FILE       | /opt/quic_sync/server.crt | Certificate file for TLS
-| TLS_KEY_FILE        | /opt/quic_sync/server.key | Key file for TLS
+| TLS_CERT_FILE       | /opt/quic-sync/server.crt | Certificate file for TLS
+| TLS_KEY_FILE        | /opt/quic-sync/server.key | Key file for TLS
 | KAFKA_BOOTSTRAP     | kafka:9092                | Bootstrap servers for Kafka brokers
 
 ## Running
@@ -81,7 +81,7 @@ You have two options for running the container either by itself or via docker sw
 * Swarm stack
   * Start
      ```bash
-     docker stack deploy -c test-stack/quic-sync-test-stack.yaml quic-sync
+     docker stack deploy -c teststack/quic-sync-test-stack.yaml quic-sync
      ```
   * Stop
     ```bash
