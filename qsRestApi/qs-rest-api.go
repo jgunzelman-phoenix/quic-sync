@@ -1,13 +1,43 @@
-package restApi
+package qsRestApi
 
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
-	subManager "github.com/jgunzelman-phoenix/quic-sync/qs-kafka"
-	model "github.com/jgunzelman-phoenix/quic-sync/qs-model"
+	"github.com/op/go-logging"
 )
+
+var MAJOR_VERSION = 0
+var ver = model.Version{Version: "0." + strconv.Itoa(MAJOR_VERSION) + ".0"}
+var log = logging.MustGetLogger("api")
+
+func GetVersion(w http.ResponseWriter, r *http.Request) {
+	response, _ := json.Marshal(ver)
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+	log.Info(BuildLogResponse(r.RemoteAddr, "version"))
+}
+
+func BuildLogResponse(path string, host string) string {
+	return host + " requested : /quic-sync/" + path
+}
+
+func GetTopics(w http.ResponseWriter, r *http.Request) {
+	response, _ := json.Marshal(subManager.GetTopics())
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+	w.Write(response)
+
+}
+
+func PostMessage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+}
 
 func DeleteSubscription(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]

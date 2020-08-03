@@ -1,4 +1,4 @@
-package model
+package qsModel
 
 // A topic connection represents a connection to anothe quic sync server.  This config will post message from the local topic to the url provided
 type Subscription struct {
@@ -12,4 +12,9 @@ type Subscription struct {
 	TopicName string `json:"topic_name,omitempty"`
 	// Remote target url that data from the local-topic will be sent to.
 	Endpoint string `json:"endpoint,omitempty"`
+}
+
+//Version structure
+type Version struct {
+	Version string `json:"version,omitempty"`
 }

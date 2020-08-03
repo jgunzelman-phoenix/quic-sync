@@ -2,6 +2,15 @@ version: '3.7'
 services:
   quic-sync:
     image: quic-sync:latest
+    ports:
+      - target: 8443
+        published: 8443
+        protocol: tcp
+        mode: host
+      - target: 8383
+        published: 8383
+        protocol: udp
+        mode: host
   swagger-ui:
     image: swaggerapi/swagger-ui
     environment:
@@ -25,6 +34,7 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=INSIDE://:9092,OUTSIDE://_{HOSTNAME_COMMAND}:9094
       - KAFKA_LISTENERS=INSIDE://:9092,OUTSIDE://:9094
       - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+      - KAFKA_CREATE_TOPICS=people:1:1,places:1:1,things:1:1
     depends_on:
       - zookeeper
   kafka-ui:
@@ -38,16 +48,13 @@ services:
     ports:
       - "2181:2181"
   rev-proxy:
-    image: nginx:alpine
+    image: quic-sync-proxy
     ports:
       - "443:8443"
     volumes:
       - type: bind
         source: ../configs/server-certs/
         target: /opt/certs
-      - type: bind
-        source: nginx/nginx.conf
-        target: /etc/nginx/
     depends_on:
       - kafka-ui
       - swagger-ui

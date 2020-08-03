@@ -1,4 +1,4 @@
-package subManager
+package qsSubManager
 
 import (
 	"bytes"
@@ -12,8 +12,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/jgunzelman-phoenix/quic-sync/qsModel"
+
 	"github.com/Shopify/sarama"
-	model "github.com/jgunzelman-phoenix/quic-sync/qs-model"
 	"github.com/lucas-clemente/quic-go"
 	"github.com/lucas-clemente/quic-go/http3"
 	"github.com/op/go-logging"
@@ -21,7 +22,7 @@ import (
 )
 
 var log = logging.MustGetLogger("sub-manager")
-var Subscriptions = make(map[string]model.Subscription)
+var Subscriptions = make(map[string]qsModel.Subscription)
 var roundTripper *http3.RoundTripper
 var brokers []string
 var cluster sarama.Consumer
@@ -66,13 +67,13 @@ func Initialize(bootstrap string) {
 }
 
 //PutSubscription adds a subscription to the system
-func PutSubscription(subscription *model.Subscription) {
+func PutSubscription(subscription *qsModel.Subscription) {
 	Subscriptions[subscription.Id] = *subscription
 	go startSubscriptionThread(subscription)
 }
 
 //GetSubscription returns a subscription assoiciated with the id provided
-func GetSubscription(id string) *model.Subscription {
+func GetSubscription(id string) *qsModel.Subscription {
 	sub := Subscriptions[id]
 	return &sub
 }
@@ -97,7 +98,7 @@ func GetTopics() []string {
 	return topics
 }
 
-func startSubscriptionThread(sub *model.Subscription) {
+func startSubscriptionThread(sub *qsModel.Subscription) {
 	id := sub.Id
 	consumer := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  brokers,

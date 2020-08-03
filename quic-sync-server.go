@@ -26,12 +26,12 @@ var kafkaBootstrap string
 
 //Logging Variables
 var logLevel string
-var log = logging.MustGetLogger("example")
+var Log logging.Logger
 
 func main() {
 	//Set up logging
 	flag.StringVar(&logLevel, "log-level", "DEBUG", "Level of Logging")
-	log := logging.MustGetLogger("quic-sync-server")
+	Log := logging.MustGetLogger("quic-sync-server")
 	format := logging.MustStringFormatter("%{color}%{level:.5s}%{color:reset} %{message}")
 	logging.SetFormatter(format)
 	if logLevel == "DEBUG" {
@@ -47,29 +47,29 @@ func main() {
 	}
 
 	//Initialize
-	log.Info("--- Quic Sync Server ---")
+	Log.Info("--- Quic Sync Server ---")
 	flag.IntVar(&httpsPort, "https-port", defaultWebPort, "port to bind to for https server")
 	flag.IntVar(&http3Port, "http3-port", defaultWebPort, "port to bind to for http3 server")
 	flag.StringVar(&certFile, "cert-file", defaultCertLocation, "cert file for tls")
 	flag.StringVar(&keyFile, "key-file", defaultKeyLocation, "key file for tls")
 	flag.StringVar(&kafkaBootstrap, "kafka-bootstrap", "localhost:9092", "kafka bootstrap server list ex: host1:port,host2:port")
 	flag.Parse()
-	log.Debug("CONFIG:")
-	log.Debug("https-port      : " + strconv.Itoa(httpsPort))
-	log.Debug("http3-port      : " + strconv.Itoa(http3Port))
-	log.Debug("cert-file       : " + certFile)
-	log.Debug("key-file        : " + keyFile)
-	log.Debug("kafka-bootstrap : " + kafkaBootstrap)
+	Log.Debug("CONFIG:")
+	Log.Debug("https-port      : " + strconv.Itoa(httpsPort))
+	Log.Debug("http3-port      : " + strconv.Itoa(http3Port))
+	Log.Debug("cert-file       : " + certFile)
+	Log.Debug("key-file        : " + keyFile)
+	Log.Debug("kafka-bootstrap : " + kafkaBootstrap)
 
 	//Set initialize Subscription Manager
 	subManager.Initialize(kafkaBootstrap)
 
 	//Gorilla router initialization
 	router := mux.NewRouter()
-	log.Info("initalizing web routes")
+	Log.Info("initalizing web routes")
 
 	//meta endpoints
-	router.HandleFunc("/quic-sync/v0/version", restApi.GetVersion).Methods("GET")
+	router.HandleFunc("/quic-sync/version", restApi.GetVersion).Methods("GET")
 
 	//sync endpoints
 	router.HandleFunc("/quic-sync/v0/message/{topic}", restApi.PostMessage).Methods("POST")
@@ -87,17 +87,17 @@ func main() {
 }
 
 func starthttps(router *mux.Router) {
-	log.Info("Starting https web server ...")
-	webServerError := http.ListenAndServeTLS("localhost:"+strconv.Itoa(httpsPort), certFile, keyFile, router)
+	Log.Info("Starting https web server ...")
+	webServerError := http.ListenAndServeTLS("0.0.0.0:"+strconv.Itoa(httpsPort), certFile, keyFile, router)
 	if webServerError != nil {
-		log.Error(webServerError.Error())
+		Log.Error(webServerError.Error())
 	}
 }
 
 func starthttp3(router *mux.Router) {
-	log.Info("Starting http3 quic web server ...")
-	webServerError := http3.ListenAndServeQUIC("localhost:"+strconv.Itoa(http3Port), certFile, keyFile, router)
+	Log.Info("Starting http3 quic web server ...")
+	webServerError := http3.ListenAndServeQUIC("0.0.0.0:"+strconv.Itoa(http3Port), certFile, keyFile, router)
 	if webServerError != nil {
-		log.Error(webServerError.Error())
+		Log.Error(webServerError.Error())
 	}
 }
