@@ -19,9 +19,11 @@ The service coded in go and will need to be cross compiled to the target OS and 
          brew install go --with-cc-common
          brew install dep
          ```
+      2. Install Docker Desktop
    * Windows
       1. Install go with cross compiling enabled
       2. Install dep package manager for go
+      3. Install Docker Desktop
 
 ## Running Project
 
@@ -29,10 +31,6 @@ Build the executable for alpine linux
 1. Pull dependecies with dep
    ```bash
    dep ensure
-   ```
-2. Run program
-   ```bash
-   go run quic-sync-server.go
    ```
  ### Program arguments
 
@@ -72,13 +70,9 @@ Build container for Quic Sync
 
 ## Running
 
-You have two options for running the container either by itself or via docker swarm with kafka and swagger api documentaion
+There is a docker swarm stack yaml included that has all the dependecies for quic sync. It also provides a couple of tools to help with testing integration. 
 
-* Just the container
-   ```bash
-   docker run -p 8443:8443 quic-sync:latest
-   ```
-* Swarm stack
+**Running Swarm Stack**
   * Start
      ```bash
      docker stack deploy -c teststack/quic-sync-test-stack.yaml quic-sync
@@ -87,3 +81,9 @@ You have two options for running the container either by itself or via docker sw
     ```bash
     docker stack remove quic-sync
     ```
+**Service Endpoints**
+| Service             | Endpoint                    | 
+| -----------         | -----------                 | 
+| Kafka UI            | https://localhost/kafka     | 
+| Swagger UI          | https://localhost/swagger   | 
+| QUIC Sync REST      | https://localhost/quic-sync | 
