@@ -46,7 +46,7 @@ services:
   rev-proxy:
     image: quic-sync-proxy
     ports:
-      - "443:8443"
+      - "8443:8443"
     volumes:
       - type: bind
         source: ../configs/server-certs/

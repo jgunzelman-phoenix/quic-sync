@@ -2,6 +2,9 @@
 
 Quic Sync is a microservice that links kafka topics over quic http3 connection.
 
+## System Design
+[](./docs/diagrams/standalone.svg)
+
 **Why use this over mirrormaker?**
    -  QUIC!!! Quic is a new application level network protocol that uses UDP as it's transport layer and supports most of TCPs features.  Best of all http3 runs on top of quic so this microservice uses REST to exchange data.
       - https://www.chromium.org/quic
@@ -32,14 +35,15 @@ Build the executable for alpine linux
    ```bash
    dep ensure
    ```
- ### Program arguments
+### Program arguments
 
- | Argument | Default Value | Description |
-| ----------- | ----------- | -------- |
-| --https-port        | 8443                      | HTTPS port to bind too.
-| --cert-file      | ./default-certs/server.crt | Certificate file for TLS
-| --key-file      | ./default-certs/server.key | Key file for TLS
-| --kafka-bootstrap |      localhost:9092      | Bootstrap servers for Kafka brokers
+ | Argument | Default Value | Description | Required |
+| ----------- | ----------- | -------- | ---- |
+| --https-port      | 8443                      | HTTPS port to bind too. | No
+| --cert-file       | ./config/server-certs/server.crt | Certificate file for TLS | Yes
+| --key-file        | ./config/server-certs/server.key | Key file for TLS | Yes
+| --trusted-dir     | ./config/trusted  | Folder for trusted certs to be added
+| --kafka-bootstrap | localhost:9092      | Bootstrap servers for Kafka brokers
 
 # Docker Container Info
 
